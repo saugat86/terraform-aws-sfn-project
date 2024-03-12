@@ -1,9 +1,8 @@
+# tflint-ignore: terraform_unused_declarations
 locals {
   name = format("%s-%s-%s", var.prefix, var.environment, var.name)
 
-  role_arn             = var.is_create_role ? aws_iam_role.this[0].arn : var.exists_role_arn
-  raise_role_arn_empty = var.is_create_role == false && length(var.exists_role_arn) == 0 ? file("Variable `exists_role_arn` is required when `is_create_role` is false") : "pass"
-
+  role_arn            = var.is_create_role ? aws_iam_role.this[0].arn : var.exists_role_arn
   enable_xray_tracing = try(var.service_integrations["xray"]["xray"], false) == true
 
   tags = merge(

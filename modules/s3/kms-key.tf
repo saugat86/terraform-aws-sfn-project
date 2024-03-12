@@ -1,5 +1,5 @@
 module "bucket_kms_key" {
-  source  = "../kms"
+  source = "../kms"
 
   count = var.is_use_kms_managed_key && local.length_key_arn == 0 ? 1 : 0
 

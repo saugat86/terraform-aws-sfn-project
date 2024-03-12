@@ -1,0 +1,37 @@
+{
+    "Comment": "A description of my state machine",
+    "StartAt": "LambdaInvoke",
+    "States": {
+      "LambdaInvoke": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$",
+          "FunctionName": "${module.lambda.function_arn}"
+        },
+        "Next": "CheckStatusCode"
+      },
+      "CheckStatusCode": {
+        "Type": "Choice",
+        "InputPath": "$",
+        "Choices": [
+          {
+            "Variable": "$.statusCode",
+            "NumericEquals": 500,
+            "Next": "Wait"
+          }
+        ],
+        "Default": "SuccessState"
+      },
+      "Wait": {
+        "Type": "Wait",
+        "OutputPath": "$.event",
+        "Seconds": 10,
+        "Next": "LambdaInvoke"
+      },
+      "SuccessState": {
+        "Type": "Succeed"
+      }
+    }
+  }

@@ -130,12 +130,6 @@ variable "is_control_object_ownership" {
   default     = true
 }
 
-variable "is_ignore_exist_object" {
-  description = "Whether to provides a resource to manage S3 Bucket Ownership Controls."
-  type        = bool
-  default     = false
-}
-
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls#rule
 variable "object_ownership" {
   description = "Object ownership. Valid values: BucketOwnerEnforced, BucketOwnerPreferred or ObjectWriter."

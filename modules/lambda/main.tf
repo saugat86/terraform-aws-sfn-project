@@ -20,13 +20,6 @@ locals {
     var.tags
   )
 }
-# Raise Exception 
-locals {
-  raise_is_lambda_role_arn_empty = var.is_create_lambda_role == false && var.lambda_role_arn == "" ? file("Variable `lambda_role_arn` is required when `is_create_lambda_role` is false") : "pass"
-
-  raise_bucket_name_empty    = var.is_edge && var.is_create_lambda_bucket == false && length(var.bucket_name) == 0 ? file("Variable `bucket_name` is required when `is_create_lambda_bucket` is false") : "pass"
-  raise_local_file_dir_empty = length(var.compressed_local_file_dir) == 0 ? file("Variable `compressed_local_file_dir` is required") : "pass"
-}
 
 
 
@@ -50,7 +43,7 @@ data "archive_file" "this" {
 module "s3" {
   count = var.is_edge && var.is_create_lambda_bucket ? 1 : 0
 
-  source  = "../s3"
+  source = "../s3"
 
   prefix      = var.prefix
   environment = var.environment
@@ -320,8 +313,8 @@ data "aws_iam_policy_document" "cloudwatch_log_group_kms_policy" {
 }
 
 module "cloudwatch_log_group_kms" {
-  count   = var.is_create_cloudwatch_log_group && var.is_create_default_kms && var.cloudwatch_log_group_kms_key_arn == null ? 1 : 0
-  source  = "../kms"
+  count  = var.is_create_cloudwatch_log_group && var.is_create_default_kms && var.cloudwatch_log_group_kms_key_arn == null ? 1 : 0
+  source = "../kms"
 
   prefix               = var.prefix
   environment          = var.environment
